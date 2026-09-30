@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  ros2_jazzy_env:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: node_image # Đã sửa thành Ubuntu 24.04
+    container_name: node_example # Đã sửa tên container 
+    # Cho phép tương tác qua terminal
+    stdin_open: true 
+    tty: true
+    # Cấu hình mạng để ROS 2 DDS có thể giao tiếp dễ dàng
+    network_mode: "host"
+    ipc: host
+    volumes:
+      # Đồng bộ thư mục src vào bên trong workspace
+      - ./src:/ros2_ws/src
+      # Chuyển tiếp cấu hình hiển thị đồ họa (X11)
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    command: bash
